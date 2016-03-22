@@ -49,6 +49,7 @@ int totalBill = 0;
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    
     [self updateTipLabel];
     [self updatePerPersonLabel];
 }
@@ -90,12 +91,18 @@ int totalBill = 0;
     self.tipPercentage.text = @"10";
     self.self.groupSizeLabel.text = @"1";
     
+    self.tipSlider.value = 10;
+    self.groupSlider.value = 1;
+    
     self.totalLabel.text = @"0";
     self.totalTipNumLabel.text = @"0";
     self.tipPerPerspnNumLabel.text = @"0";
     self.totalToPayNumLabel.text = @"0";
     self.totalPerPersonNumLabel.text = @"0";
     counter = 0;
+    totalBill = 0;
+    [self updatePerPersonLabel];
+    [self updateTipLabel];
 }
 
 
@@ -106,28 +113,32 @@ int totalBill = 0;
     [self updateTipLabel];
 }
 
-- (void)updateTipLabel{
-    float tip = (float)((int)totalBill * (int)self.tipSlider.value) / (int)100;
-    self.totalTipNumLabel.text = [NSString stringWithFormat:@"$ %.2f", tip];
-    float totalWithTip = tip + (float)totalBill;
-    self.totalToPayNumLabel.text = [NSString stringWithFormat:@"$ %.2f", totalWithTip];
-}
-
 
 - (IBAction)groupSizeSlider:(UISlider *)sender {
     self.groupSizeLabel.text = [NSString stringWithFormat:@"%d", (int)sender.value];
     [self updatePerPersonLabel];
 }
 
+
 -(void)updatePerPersonLabel{
     float tip = (float)((int)totalBill * (int)self.tipSlider.value) / (int)100;
     
-    float tipPerPerson = (float)(int)tip / (int)self.groupSlider.value;
+    // tip per person
+    float tipPerPerson = (float)(float)tip / (int)self.groupSlider.value;
     self.tipPerPerspnNumLabel.text = [NSString stringWithFormat:@"$ %.2f", tipPerPerson];
     
+    // total per person
     float totalWithTip = tip + (float)totalBill;
     float totalPerPersonToPay = (float)(totalWithTip / (int)self.groupSlider.value);
     self.totalPerPersonNumLabel.text = [NSString stringWithFormat:@"$ % .2f", totalPerPersonToPay];
+}
+
+
+- (void)updateTipLabel{
+    float tip = (float)((int)totalBill * (int)self.tipSlider.value) / (int)100;
+    self.totalTipNumLabel.text = [NSString stringWithFormat:@"$ %.2f", tip];
+    float totalWithTip = tip + (float)totalBill;
+    self.totalToPayNumLabel.text = [NSString stringWithFormat:@"$ %.2f", totalWithTip];
 }
 
 
