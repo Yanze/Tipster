@@ -67,6 +67,7 @@ float totalBill = 0.00;
     if(userIsInTheMiddleOfTypingNumber){
         self.totalLabel.text = [NSString stringWithFormat:@"%@%@", self.totalLabel.text, [(UIButton *)sender currentTitle]];
     }
+    
     else {
         self.totalLabel.text = [(UIButton *) sender currentTitle];
         userIsInTheMiddleOfTypingNumber = YES;
@@ -103,6 +104,15 @@ float totalBill = 0.00;
         self.totalLabel.text = [NSString stringWithFormat:@"%@%@", self.totalLabel.text, [(UIButton *)sender currentTitle]];
     }
 }
+
+- (IBAction)dotClicked:(UIButton *)sender {
+    if(counter == 0){
+       self.totalLabel.text = [NSString stringWithFormat:@"%@%@", self.totalLabel.text, [(UIButton *)sender currentTitle]];
+        counter++;
+    }
+}
+
+
 
 
 
