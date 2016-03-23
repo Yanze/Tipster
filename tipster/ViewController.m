@@ -31,8 +31,11 @@
 
 
 @implementation ViewController
-int dotClicked = 0;
 float totalBill = 0.00;
+int afterDotClickedLetterCounter = 0;
+BOOL userIsInTheMiddleOfTypingNumber = NO;
+BOOL dotClicked = NO;
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -61,11 +64,14 @@ float totalBill = 0.00;
 
 
 //MARK: button clicked function
-    BOOL userIsInTheMiddleOfTypingNumber = NO;
 - (IBAction)buttonClicked:(UIButton *)sender {
     
-    if(userIsInTheMiddleOfTypingNumber || dotClicked != 0){
-        self.totalLabel.text = [NSString stringWithFormat:@"%@%@", self.totalLabel.text, [(UIButton *)sender currentTitle]];
+    if(dotClicked && afterDotClickedLetterCounter >= 2){
+        return;
+    }
+    
+    if(userIsInTheMiddleOfTypingNumber){
+        [self checkConditions: sender];
     }
     
     else {
@@ -73,7 +79,6 @@ float totalBill = 0.00;
         userIsInTheMiddleOfTypingNumber = YES;
     }
 
-    
     totalBill = [self.totalLabel.text intValue];
     [self updateTipLabel];
     [self updatePerPersonLabel];
@@ -81,15 +86,28 @@ float totalBill = 0.00;
 }
 
 - (IBAction)zeroClicked:(UIButton *)sender {
-    if(userIsInTheMiddleOfTypingNumber){
-        self.totalLabel.text = [NSString stringWithFormat:@"%@%@", self.totalLabel.text, [(UIButton *)sender currentTitle]];
+    if(dotClicked && afterDotClickedLetterCounter >= 2){
+        return;
     }
+    
+    if(userIsInTheMiddleOfTypingNumber){
+        [self checkConditions: sender];
+    }
+    
+}
+
+-(void)checkConditions: (UIButton*)sender{
+    if(dotClicked){
+        afterDotClickedLetterCounter++;
+    }  
+    self.totalLabel.text = [NSString stringWithFormat:@"%@%@", self.totalLabel.text, [(UIButton *)sender currentTitle]];
 }
 
 - (IBAction)dotClicked:(UIButton *)sender {
-    if(dotClicked == 0){
+    if(!dotClicked){
        self.totalLabel.text = [NSString stringWithFormat:@"%@%@", self.totalLabel.text, [(UIButton *)sender currentTitle]];
-        dotClicked++;
+        dotClicked = YES;
+        userIsInTheMiddleOfTypingNumber = YES;
     }
 }
 
@@ -106,10 +124,12 @@ float totalBill = 0.00;
     self.tipPerPerspnNumLabel.text = @"0";
     self.totalToPayNumLabel.text = @"0";
     self.totalPerPersonNumLabel.text = @"0";
-    dotClicked = 0;
+
+    afterDotClickedLetterCounter = 0;
     totalBill = 0.00;
     
     userIsInTheMiddleOfTypingNumber = NO;
+    dotClicked = NO;
     
     [self updatePerPersonLabel];
     [self updateTipLabel];
