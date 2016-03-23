@@ -31,7 +31,7 @@
 
 
 @implementation ViewController
-int counter = 0;
+int dotClicked = 0;
 float totalBill = 0.00;
 
 - (void)viewDidLoad {
@@ -64,7 +64,7 @@ float totalBill = 0.00;
     BOOL userIsInTheMiddleOfTypingNumber = NO;
 - (IBAction)buttonClicked:(UIButton *)sender {
     
-    if(userIsInTheMiddleOfTypingNumber){
+    if(userIsInTheMiddleOfTypingNumber || dotClicked != 0){
         self.totalLabel.text = [NSString stringWithFormat:@"%@%@", self.totalLabel.text, [(UIButton *)sender currentTitle]];
     }
     
@@ -72,26 +72,7 @@ float totalBill = 0.00;
         self.totalLabel.text = [(UIButton *) sender currentTitle];
         userIsInTheMiddleOfTypingNumber = YES;
     }
-    
-//    if ([self.totalLabel.text  isEqual: @"0"]) {
-//        self.totalLabel.text = [(UIButton *) sender currentTitle];
-//    }
-    
-//    
-//    else if([[(UIButton *) sender currentTitle] isEqual:@"."]){
-//        if (counter == 0) {
-//            counter++;
-//            self.totalLabel.text = [NSString stringWithFormat:@"%@%@", self.totalLabel.text, [(UIButton *)sender currentTitle]];
-//        }
-//        else{
-//            return;
-//        }
-//        
-//    }
-//    
-//    else{
-//        self.totalLabel.text = [NSString stringWithFormat:@"%@%@", self.totalLabel.text, [(UIButton *)sender currentTitle]];
-//    }
+
     
     totalBill = [self.totalLabel.text intValue];
     [self updateTipLabel];
@@ -106,15 +87,11 @@ float totalBill = 0.00;
 }
 
 - (IBAction)dotClicked:(UIButton *)sender {
-    if(counter == 0){
+    if(dotClicked == 0){
        self.totalLabel.text = [NSString stringWithFormat:@"%@%@", self.totalLabel.text, [(UIButton *)sender currentTitle]];
-        counter++;
+        dotClicked++;
     }
 }
-
-
-
-
 
 
 - (IBAction)cClicked:(UIButton *)sender {
@@ -129,7 +106,7 @@ float totalBill = 0.00;
     self.tipPerPerspnNumLabel.text = @"0";
     self.totalToPayNumLabel.text = @"0";
     self.totalPerPersonNumLabel.text = @"0";
-    counter = 0;
+    dotClicked = 0;
     totalBill = 0.00;
     
     userIsInTheMiddleOfTypingNumber = NO;
